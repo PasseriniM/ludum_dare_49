@@ -20,10 +20,12 @@ public class Ally : MonoBehaviour
 	private bool isDashing = false;
 
 	public GameObject enemy;
+	public GameObject deathPrefab;
 	private float distToPlayer;
 	private float distToPlayerY;
 	public float meleeDist = 1.5f;
 	public float rangeDist = 5f;
+	public float idleDist = 10f;
 	private bool canAttack = true;
 	private Transform attackCheck;
 	public float dmgValue = 4;
@@ -33,6 +35,7 @@ public class Ally : MonoBehaviour
 	private float randomDecision = 0;
 	private bool doOnceDecision = true;
 	private bool endDecision = false;
+	private bool dying = false;
 	private Animator anim;
 
 	void Awake()
@@ -45,12 +48,15 @@ public class Ally : MonoBehaviour
 	// Update is called once per frame
 	void FixedUpdate()
 	{
+		if(dying)
+        {
+			return;
+        }
 
 		if (life <= 0)
 		{
 			StartCoroutine(DestroyEnemy());
 		}
-
 		else if (enemy != null) 
 		{
 			if (isDashing)
@@ -89,32 +95,25 @@ public class Ally : MonoBehaviour
 						if ((distToPlayer > 0f && transform.localScale.x < 0f) || (distToPlayer < 0f && transform.localScale.x > 0f)) 
 							Flip();
 
-						if (randomDecision < 0.4f)
-							Run();
-						else if (randomDecision >= 0.4f && randomDecision < 0.6f)
-							Jump();
-						else if (randomDecision >= 0.6f && randomDecision < 0.8f)
-							StartCoroutine(Dash());
-						else if (randomDecision >= 0.8f && randomDecision < 0.95f)
-							RangeAttack();
-						else
+						if(distToPlayer > idleDist)
+                        {
 							Idle();
+                        }
+						else
+						{
+							if (randomDecision < 0.4f)
+								Run();
+							else if (randomDecision >= 0.4f && randomDecision < 0.8f)
+								Jump();
+							else
+								Idle();
+						}
 					}
 					else
 					{
 						endDecision = false;
 					}
 				}
-			}
-			else if (isHitted)
-			{
-				if ((distToPlayer > 0f && transform.localScale.x > 0f) || (distToPlayer < 0f && transform.localScale.x < 0f))
-				{
-					Flip();
-					StartCoroutine(Dash());
-				}
-				else
-					StartCoroutine(Dash());
 			}
 		}
 		else 
@@ -182,18 +181,6 @@ public class Ally : MonoBehaviour
 		StartCoroutine(WaitToAttack(0.5f));
 	}
 
-	public void RangeAttack()
-	{
-		if (doOnceDecision)
-		{
-			GameObject throwableProj = Instantiate(throwableObject, transform.position + new Vector3(transform.localScale.x * 0.5f, -0.2f), Quaternion.identity) as GameObject;
-			throwableProj.GetComponent<ThrowableProjectile>().owner = gameObject;
-			Vector2 direction = new Vector2(transform.localScale.x, 0f);
-			throwableProj.GetComponent<ThrowableProjectile>().direction = direction;
-			StartCoroutine(NextDecision(0.5f));
-		}
-	}
-
 	public void Run()
 	{
 		anim.SetBool("IsWaiting", false);
@@ -246,15 +233,6 @@ public class Ally : MonoBehaviour
 		canAttack = true;
 	}
 
-	IEnumerator Dash()
-	{
-		anim.SetBool("IsDashing", true);
-		isDashing = true;
-		yield return new WaitForSeconds(0.1f);
-		isDashing = false;
-		EndDecision();
-	}
-
 	IEnumerator NextDecision(float time)
 	{
 		doOnceDecision = false;
@@ -266,11 +244,14 @@ public class Ally : MonoBehaviour
 
 	IEnumerator DestroyEnemy()
 	{
+		dying = true;
 		CapsuleCollider2D capsule = GetComponent<CapsuleCollider2D>();
 		capsule.size = new Vector2(1f, 0.25f);
 		capsule.offset = new Vector2(0f, -0.8f);
 		capsule.direction = CapsuleDirection2D.Horizontal;
-		transform.GetComponent<Animator>().SetBool("IsDead", true);
+		//transform.GetComponent<Animator>().SetBool("IsDead", true);
+		GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
+		Instantiate(deathPrefab, transform);
 		yield return new WaitForSeconds(0.25f);
 		m_Rigidbody2D.velocity = new Vector2(0, m_Rigidbody2D.velocity.y);
 		yield return new WaitForSeconds(1f);

@@ -35,10 +35,13 @@ public class CharacterController2D : MonoBehaviour
 	public bool invincible = false; //If player can die
 	private bool canMove = true; //If player can move
 	private bool ending = false;
+	private bool dying = false;
 
 	private Animator animator;
 	public ParticleSystem particleJumpUp; //Trail particles
 	public ParticleSystem particleJumpDown; //Explosion particles
+
+	public GameObject deathPrefab;
 
 	private float jumpWallStartX = 0;
 	private float jumpWallDistX = 0; //Distance between player and wall
@@ -58,7 +61,8 @@ public class CharacterController2D : MonoBehaviour
 
 	public void End()
 	{ 
-		ending = true; 
+		ending = true;
+		gauges.End();
 	}
 
 	private void Awake()
@@ -85,7 +89,7 @@ public class CharacterController2D : MonoBehaviour
 		bool wasGrounded = m_Grounded;
 		m_Grounded = false;
 
-		if (gauges.ShouldDie())
+		if (gauges.ShouldDie() && !dying && !ending)
 		{
 			StartCoroutine(WaitToDead());
 		}
@@ -186,23 +190,27 @@ public class CharacterController2D : MonoBehaviour
 				Vector3 targetVelocity = new Vector2(move * multiplier, m_Rigidbody2D.velocity.y);
 				// And then smoothing it out and applying it to the character
 				m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref velocity, m_MovementSmoothing);
+				
+				if (!attack.IsAttacking())
+                {
 
-				// If the input is moving the player right and the player is facing left...
-				if (move > 0 && !m_FacingRight && !isWallSliding)
-				{
-					// ... flip the player.
-					Flip();
-				}
-				// Otherwise if the input is moving the player left and the player is facing right...
-				else if (move < 0 && m_FacingRight && !isWallSliding)
-				{
-					// ... flip the player.
-					Flip();
+					// If the input is moving the player right and the player is facing left...
+					if (move > 0 && !m_FacingRight && !isWallSliding)
+					{
+						// ... flip the player.
+						Flip();
+					}
+					// Otherwise if the input is moving the player left and the player is facing right...
+					else if (move < 0 && m_FacingRight && !isWallSliding)
+					{
+						// ... flip the player.
+						Flip();
+					}
 				}
 			}
 
 			// If the player should jump...
-			if(jump && gauges.CanJump())
+			if(jump && gauges.CanJump() && !attack.IsAttacking())
             {
 				if (m_Grounded && (canWallJump || !isWallSliding))
 				{
@@ -383,13 +391,16 @@ public class CharacterController2D : MonoBehaviour
 
 	IEnumerator WaitToDead()
 	{
-		animator.SetBool("IsDead", true);
+		//animator.SetBool("IsDead", true);
+		dying = true;
 		canMove = false;
 		invincible = true;
 		GetComponent<Attack>().enabled = false;
+		GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
+		Instantiate(deathPrefab, GetComponent<Transform>());
 		yield return new WaitForSeconds(0.4f);
 		m_Rigidbody2D.velocity = new Vector2(0, m_Rigidbody2D.velocity.y);
-		yield return new WaitForSeconds(1.1f);
+		yield return new WaitForSeconds(1.5f);
 		SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
 	}
 }

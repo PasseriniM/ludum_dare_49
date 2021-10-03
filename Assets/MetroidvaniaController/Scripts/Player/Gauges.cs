@@ -56,6 +56,12 @@ public class Gauges : MonoBehaviour
     private float currentHeat;
     private float currentSteam;
     private float currentHeatToSteamMultiplierPerSecond;
+    private bool ending = false;
+
+    public void End()
+    {
+        ending = true;
+    }
 
     void BuildUI()
     {
@@ -81,6 +87,11 @@ public class Gauges : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if(ending)
+        {
+            return;
+        }
+
         currentHeat += Time.fixedDeltaTime * heatRaisePerSecond;
         currentSteam += Time.fixedDeltaTime * currentHeat * currentHeatToSteamMultiplierPerSecond;
 
@@ -161,6 +172,12 @@ public class Gauges : MonoBehaviour
     public void Cooldown(float cooling)
     {
         currentHeat -= cooling;
+        ClampHeat();
+    }
+
+    public void HeatUp(float heat)
+    {
+        currentHeat += heat;
         ClampHeat();
     }
 }
