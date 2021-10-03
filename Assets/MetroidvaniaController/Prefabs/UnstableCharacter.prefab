@@ -9956,7 +9956,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 96be36fcbc69e8944b5d9f089bc07112, type: 3}
+  m_Sprite: {fileID: -7538007998765841484, guid: 9cc758bbebb114c4cb930c3efc38ee0e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -10209,12 +10209,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92bd001bd2e747b4e8199ccb9c601dd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textHeat: {fileID: 0}
-  textSteam: {fileID: 0}
+  heatBarObject: {fileID: 0}
+  steamBarObject: {fileID: 0}
   startingHeat: 30
   startingSteam: 10
   maxHeat: 100
   maxSteam: 100
+  criticalHeat: 90
+  criticalSteam: 90
   heatRaisePerSecond: 1
   heatToSteamMultiplierPerSecond: 0.3
   heatToSteamCriticalMultiplier: 1
