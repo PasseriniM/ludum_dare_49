@@ -44,6 +44,7 @@ public class CharacterController2D : MonoBehaviour
 	private bool limitVelOnWallJump = false; //For limit wall jump distance with low fps
 
 	private Gauges gauges;
+	private Attack attack;
 
 	[Header("Events")]
 	[Space]
@@ -59,6 +60,7 @@ public class CharacterController2D : MonoBehaviour
 		m_Rigidbody2D = GetComponent<Rigidbody2D>();
 		gauges = GetComponent<Gauges>();
 		animator = GetComponent<Animator>();
+		attack = GetComponent<Attack>();
 
 		if (OnFallEvent == null)
 			OnFallEvent = new UnityEvent();
@@ -169,6 +171,10 @@ public class CharacterController2D : MonoBehaviour
 				if(m_Grounded && gauges.ShouldSlowDown())
                 {
 					multiplier = 2f;
+                }
+				if(attack.IsAttacking())
+                {
+					multiplier = 0f;
                 }
 
 				Vector3 targetVelocity = new Vector2(move * multiplier, m_Rigidbody2D.velocity.y);

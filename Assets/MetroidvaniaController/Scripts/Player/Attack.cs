@@ -5,17 +5,17 @@ using UnityEngine.InputSystem;
 
 public class Attack : MonoBehaviour
 {
-	public float dmgValue = 4;
-	public float laserRange = 10;
+	public float dmgValuePerSecond = 4;
 
 	public GameObject throwableObject;
-	public Transform attackCheck;
+	public GameObject attackCheck;
 	private Rigidbody2D m_Rigidbody2D;
 	public Animator animator;
 	public bool canAttack = true;
 	public bool isTimeToCheck = false;
 
 	private bool attack = false;
+	private bool isAttacking = false;
 
 	public GameObject cam;
 
@@ -27,10 +27,9 @@ public class Attack : MonoBehaviour
 		gauges = GetComponent<Gauges>();
 	}
 
-	// Start is called before the first frame update
-	void Start()
+	public bool IsAttacking()
     {
-        
+		return isAttacking;
     }
 
 	public void OnAttack(InputAction.CallbackContext context)
@@ -47,7 +46,8 @@ public class Attack : MonoBehaviour
     {
 		if (attack && gauges.CanAttack())
 		{
-			animator.SetBool("IsAttacking", true);
+			isAttacking = true;
+			animator.SetBool("IsAttacking", isAttacking);
 			StartCoroutine(AttackCooldown());
 			attack = false;
 			gauges.OnAttack();
@@ -56,38 +56,43 @@ public class Attack : MonoBehaviour
 
 	IEnumerator AttackCooldown()
 	{
-		yield return new WaitForSeconds(0.25f);
-		canAttack = true;
+        while (animator.GetBool("IsAttacking"))
+        { 
+			yield return new WaitForSeconds(0.3f);
+		}
+
+        canAttack = true;
+		isAttacking = false;
 	}
 
-	public void DoDashDamage()
-	{
-		dmgValue = Mathf.Abs(dmgValue);
-/*		Collider2D[] collidersEnemies = Physics2D.OverlapCircleAll(attackCheck.position, 0.9f);
-		for (int i = 0; i < collidersEnemies.Length; i++)
-		{
-			if (collidersEnemies[i].gameObject.tag == "Enemy")
-			{
-				if (collidersEnemies[i].transform.position.x - transform.position.x < 0)
-				{
-					dmgValue = -dmgValue;
-				}
-				collidersEnemies[i].gameObject.SendMessage("ApplyDamage", dmgValue);
-				cam.GetComponent<CameraFollow>().ShakeCamera();
-			}
-        }*/
-		
-		Vector3 direction = new Vector3(System.Math.Sign(transform.localScale.x), 0f,0f);
-		RaycastHit2D[] hits = Physics2D.RaycastAll(attackCheck.position, direction, laserRange);
-		for (int i = 0; i < hits.Length; i++)
+    private void FixedUpdate()
+    {
+		if(animator.GetBool("IsAttacking"))
         {
-			if(hits[i].collider.gameObject.tag == "Enemy")
+			DoDamage();
+        }
+
+	}
+
+    public void DoDamage()
+	{
+		dmgValuePerSecond = Mathf.Abs(dmgValuePerSecond);
+
+		Collider2D attackCollider = attackCheck.GetComponent<Collider2D>();
+		int numColliders = 10;
+		Collider2D[] colliders = new Collider2D[numColliders];
+		ContactFilter2D contactFilter = new ContactFilter2D();
+		int hits = attackCollider.OverlapCollider(contactFilter,colliders);
+		for (int i = 0; i < hits; i++)
+        {
+			if(colliders[i].gameObject.tag == "Enemy")
             {
-				if (hits[i].collider.transform.position.x - transform.position.x < 0)
+				if (colliders[i].transform.position.x - transform.position.x < 0)
 				{
-					dmgValue = -dmgValue;
+					dmgValuePerSecond = -dmgValuePerSecond;
 				}
-				hits[i].collider.gameObject.SendMessage("ApplyDamage", dmgValue);
+				float dmg = dmgValuePerSecond * Time.fixedDeltaTime;
+				colliders[i].gameObject.SendMessage("ApplyDamage", dmg);
 				cam.GetComponent<CameraFollow>().ShakeCamera();
 			}
         }
