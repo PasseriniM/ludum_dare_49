@@ -62,7 +62,7 @@ public class Gauges : MonoBehaviour
         steamBar.SetValue(currentSteam);
     }
 
-    private void Awake()
+    public void Start()
     {
         heatBar = heatBarObject.GetComponent<BarScript>();
         steamBar = steamBarObject.GetComponent<BarScript>();
