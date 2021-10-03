@@ -9,6 +9,7 @@ public class Attack : MonoBehaviour
 
 	public GameObject throwableObject;
 	public GameObject attackCheck;
+	public GameObject laser;
 	private Rigidbody2D m_Rigidbody2D;
 	public Animator animator;
 	public bool canAttack = true;
@@ -48,6 +49,7 @@ public class Attack : MonoBehaviour
 		{
 			isAttacking = true;
 			animator.SetBool("IsAttacking", isAttacking);
+			laser.SetActive(true);
 			StartCoroutine(AttackCooldown());
 			attack = false;
 			gauges.OnAttack();
@@ -58,11 +60,12 @@ public class Attack : MonoBehaviour
 	{
         while (animator.GetBool("IsAttacking"))
         { 
-			yield return new WaitForSeconds(0.3f);
+			yield return new WaitForSeconds(0.1f);
 		}
 
         canAttack = true;
 		isAttacking = false;
+		laser.SetActive(false);
 	}
 
     private void FixedUpdate()

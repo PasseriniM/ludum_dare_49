@@ -55,6 +55,7 @@ public class Gauges : MonoBehaviour
     //State of gauges
     private float currentHeat;
     private float currentSteam;
+    private float currentHeatToSteamMultiplierPerSecond;
 
     void BuildUI()
     {
@@ -68,6 +69,7 @@ public class Gauges : MonoBehaviour
         steamBar = steamBarObject.GetComponent<BarScript>();
         currentHeat = startingHeat;
         currentSteam = startingSteam;
+        currentHeatToSteamMultiplierPerSecond = heatToSteamMultiplierPerSecond;
         BuildUI();
     }
 
@@ -80,14 +82,18 @@ public class Gauges : MonoBehaviour
     private void FixedUpdate()
     {
         currentHeat += Time.fixedDeltaTime * heatRaisePerSecond;
-        currentSteam += Time.fixedDeltaTime * currentHeat * heatToSteamMultiplierPerSecond;
+        currentSteam += Time.fixedDeltaTime * currentHeat * currentHeatToSteamMultiplierPerSecond;
 
         ClampHeat();
         ClampSteam();
 
         if (currentHeat == maxHeat) //Heat multiplier starts increasing at max heat level
         {
-            heatToSteamMultiplierPerSecond += heatToSteamCriticalMultiplier * Time.fixedDeltaTime;
+            currentHeatToSteamMultiplierPerSecond += heatToSteamCriticalMultiplier * Time.fixedDeltaTime;
+        }
+        else
+        {
+            currentHeatToSteamMultiplierPerSecond = heatToSteamMultiplierPerSecond;
         }
     }
 
