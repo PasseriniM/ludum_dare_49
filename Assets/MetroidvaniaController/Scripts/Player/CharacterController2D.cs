@@ -34,6 +34,7 @@ public class CharacterController2D : MonoBehaviour
 	public float life = 10f; //Life of the player
 	public bool invincible = false; //If player can die
 	private bool canMove = true; //If player can move
+	private bool ending = false;
 
 	private Animator animator;
 	public ParticleSystem particleJumpUp; //Trail particles
@@ -54,6 +55,11 @@ public class CharacterController2D : MonoBehaviour
 
 	[System.Serializable]
 	public class BoolEvent : UnityEvent<bool> { }
+
+	public void End()
+	{ 
+		ending = true; 
+	}
 
 	private void Awake()
 	{
@@ -172,7 +178,7 @@ public class CharacterController2D : MonoBehaviour
                 {
 					multiplier = 2f;
                 }
-				if(attack.IsAttacking())
+				if(attack.IsAttacking() || ending)
                 {
 					multiplier = 0f;
                 }
