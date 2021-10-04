@@ -404,7 +404,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ff4409926f4822409c8003d703f6dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioSound: {fileID: 8300000, guid: bd2c80b023c76e04c8aa9a1e6b3151f0, type: 3}
+  audioSound: {fileID: 8300000, guid: 2265245e366a97f4b8934bf10e57652d, type: 3}
   loop: 0
 --- !u!114 &-480471806394875632
 MonoBehaviour:
@@ -619,6 +619,20 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!114 &860540951783631705
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ff4409926f4822409c8003d703f6dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSound: {fileID: 8300000, guid: 7fb55cf71f9b8b946ae426380bb796bb, type: 3}
+  loop: 1
 --- !u!1101 &975263125599673518
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -702,7 +716,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6bddbe7cb6a305140b8c616bb9082a74, type: 3}
   m_Name: 
@@ -858,6 +872,7 @@ AnimatorState:
   - {fileID: -415075276753247758}
   m_StateMachineBehaviours:
   - {fileID: 2234212912497911812}
+  - {fileID: 860540951783631705}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -1016,7 +1031,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: AttackGround
-  m_Speed: 1
+  m_Speed: 2
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -2834103057509388721}
@@ -1044,7 +1059,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5ff4409926f4822409c8003d703f6dc5, type: 3}
   m_Name: 
@@ -1088,5 +1103,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ff4409926f4822409c8003d703f6dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioSound: {fileID: 8300000, guid: 9e4d23e42db1814438fbf7bf1c3a5f75, type: 3}
+  audioSound: {fileID: 8300000, guid: 62bb0aa6720847c49bc124f8b66598bd, type: 3}
   loop: 1

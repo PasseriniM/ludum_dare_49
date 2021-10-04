@@ -47,7 +47,7 @@ public class Gauges : MonoBehaviour
 
     public float steamJumpCost = 20;
 
-    public float steamAttackCost = 5;
+    public float heatAttackCost = 5;
 
     public float steamGlideCostPerSecond = 5;
 
@@ -137,7 +137,7 @@ public class Gauges : MonoBehaviour
 
     public bool CanAttack()
     {
-        return currentSteam > steamAttackCost;
+        return true;
     }
 
     public bool CanGlide()
@@ -147,8 +147,8 @@ public class Gauges : MonoBehaviour
 
     public void OnAttack()
     {
-        currentSteam -= steamAttackCost;
-        ClampSteam();
+        currentHeat += heatAttackCost;
+        ClampHeat();
     }
 
     public void OnJump()

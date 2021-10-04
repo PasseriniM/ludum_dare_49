@@ -251,7 +251,8 @@ public class Ally : MonoBehaviour
 		capsule.direction = CapsuleDirection2D.Horizontal;
 		//transform.GetComponent<Animator>().SetBool("IsDead", true);
 		GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
-		Instantiate(deathPrefab, transform);
+		var d = Instantiate(deathPrefab, transform);
+		d.transform.localScale = transform.localScale;
 		yield return new WaitForSeconds(0.25f);
 		m_Rigidbody2D.velocity = new Vector2(0, m_Rigidbody2D.velocity.y);
 		yield return new WaitForSeconds(1f);

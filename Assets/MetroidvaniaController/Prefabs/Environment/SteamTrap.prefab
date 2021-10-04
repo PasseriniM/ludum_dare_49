@@ -63,7 +63,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  increaseSteamPerSecond: 5
+  increaseSteamPerSecond: 10
 --- !u!198 &6467620305754871321
 ParticleSystem:
   m_ObjectHideFlags: 0

@@ -57,7 +57,7 @@ public class Attack : MonoBehaviour
 
 		if (animator.GetBool("IsAttacking"))
 		{
-			//DoDamage();
+			DoDamage();
 		}
 	}
 

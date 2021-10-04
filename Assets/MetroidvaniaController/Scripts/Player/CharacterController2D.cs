@@ -12,6 +12,7 @@ public class CharacterController2D : MonoBehaviour
 	[SerializeField] private Transform m_GroundCheck;                           // A position marking where to check if the player is grounded.
 	[SerializeField] private Transform m_WallCheck;                             //Posicion que controla si el personaje toca una pared
 	[SerializeField] private GameObject propulsion;
+	[SerializeField] private GameObject tail;
 
 	const float k_GroundedRadius = .2f; // Radius of the overlap circle to determine if grounded
 	private bool m_Grounded;            // Whether or not the player is grounded.
@@ -324,7 +325,7 @@ public class CharacterController2D : MonoBehaviour
 
 	public void ApplyDamage(float damage, Vector3 position) 
 	{
-		Debug.Log("apply damage");
+		//Debug.Log("apply damage");
 		if (!invincible)
 		{
 			animator.SetBool("Hit", true);
@@ -400,6 +401,7 @@ public class CharacterController2D : MonoBehaviour
 		invincible = true;
 		GetComponent<Attack>().enabled = false;
 		GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
+		tail.SetActive(false);
 		Instantiate(deathPrefab, GetComponent<Transform>());
 		yield return new WaitForSeconds(0.4f);
 		m_Rigidbody2D.velocity = new Vector2(0, m_Rigidbody2D.velocity.y);
