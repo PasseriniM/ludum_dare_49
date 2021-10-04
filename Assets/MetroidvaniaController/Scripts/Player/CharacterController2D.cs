@@ -89,7 +89,7 @@ public class CharacterController2D : MonoBehaviour
 		bool wasGrounded = m_Grounded;
 		m_Grounded = false;
 
-		if (gauges.ShouldDie() && !dying && !ending)
+		if (gauges.ShouldDie() && !dying && !ending && !invincible)
 		{
 			StartCoroutine(WaitToDead());
 		}

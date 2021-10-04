@@ -12,7 +12,7 @@ public class SteamTrapScript : MonoBehaviour
 
 	public float increaseSteamPerSecond = 5;
 
-	private void Awake()
+	private void Start()
 	{
 		collider2Dcustom = GetComponent<Collider2D>();
 		gauges = player.GetComponent<Gauges>();
