@@ -81,6 +81,7 @@ public class Attack : MonoBehaviour
 		int numColliders = 10;
 		Collider2D[] colliders = new Collider2D[numColliders];
 		ContactFilter2D contactFilter = new ContactFilter2D();
+		contactFilter.NoFilter();
 		int hits = attackCollider.OverlapCollider(contactFilter,colliders);
 		for (int i = 0; i < hits; i++)
         {
