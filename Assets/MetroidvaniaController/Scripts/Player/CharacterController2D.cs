@@ -10,7 +10,8 @@ public class CharacterController2D : MonoBehaviour
 	[SerializeField] private bool m_AirControl = false;							// Whether or not a player can steer while jumping;
 	[SerializeField] private LayerMask m_WhatIsGround;							// A mask determining what is ground to the character
 	[SerializeField] private Transform m_GroundCheck;							// A position marking where to check if the player is grounded.
-	[SerializeField] private Transform m_WallCheck;								//Posicion que controla si el personaje toca una pared
+	[SerializeField] private Transform m_WallCheck;                             //Posicion que controla si el personaje toca una pared
+	[SerializeField] private GameObject propulsion;
 
 	const float k_GroundedRadius = .2f; // Radius of the overlap circle to determine if grounded
 	private bool m_Grounded;            // Whether or not the player is grounded.
@@ -82,6 +83,7 @@ public class CharacterController2D : MonoBehaviour
     public void Update()
     {
 		animator.SetFloat("Speed", Mathf.Abs(m_Rigidbody2D.velocity.x));
+		propulsion.SetActive(animator.GetBool("IsJumping"));
 	}
 
     private void FixedUpdate()
@@ -164,7 +166,7 @@ public class CharacterController2D : MonoBehaviour
 			if (dash && canDash && !isWallSliding)
 			{
 				//m_Rigidbody2D.AddForce(new Vector2(transform.localScale.x * m_DashForce, 0f));
-				StartCoroutine(DashCooldown());
+				//StartCoroutine(DashCooldown());
 			}
 			// If crouching, check to see if the character can stand up
 			if (isDashing)

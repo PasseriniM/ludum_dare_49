@@ -48,11 +48,16 @@ public class Attack : MonoBehaviour
 		if (attack && gauges.CanAttack())
 		{
 			isAttacking = true;
-			animator.SetBool("IsAttacking", isAttacking);
 			laser.SetActive(true);
+			animator.SetBool("IsAttacking", isAttacking);
 			StartCoroutine(AttackCooldown());
 			attack = false;
 			gauges.OnAttack();
+		}
+
+		if (animator.GetBool("IsAttacking"))
+		{
+			//DoDamage();
 		}
 	}
 
@@ -66,15 +71,6 @@ public class Attack : MonoBehaviour
         canAttack = true;
 		isAttacking = false;
 		laser.SetActive(false);
-	}
-
-    private void FixedUpdate()
-    {
-		if(animator.GetBool("IsAttacking"))
-        {
-			DoDamage();
-        }
-
 	}
 
     public void DoDamage()
