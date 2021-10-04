@@ -95,7 +95,7 @@ public class Ally : MonoBehaviour
 						if ((distToPlayer > 0f && transform.localScale.x < 0f) || (distToPlayer < 0f && transform.localScale.x > 0f)) 
 							Flip();
 
-						if(distToPlayer > idleDist)
+						if(Mathf.Abs(distToPlayer) > idleDist)
                         {
 							Idle();
                         }
