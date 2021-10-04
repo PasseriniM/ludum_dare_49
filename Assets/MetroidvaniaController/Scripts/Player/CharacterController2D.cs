@@ -5,11 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class CharacterController2D : MonoBehaviour
 {
-	[SerializeField] private float m_JumpForce = 400f;							// Amount of force added when the player jumps.
-	[Range(0, .3f)] [SerializeField] private float m_MovementSmoothing = .05f;	// How much to smooth out the movement
-	[SerializeField] private bool m_AirControl = false;							// Whether or not a player can steer while jumping;
-	[SerializeField] private LayerMask m_WhatIsGround;							// A mask determining what is ground to the character
-	[SerializeField] private Transform m_GroundCheck;							// A position marking where to check if the player is grounded.
+	[SerializeField] private float m_JumpForce = 400f;                          // Amount of force added when the player jumps.
+	[Range(0, .3f)] [SerializeField] private float m_MovementSmoothing = .05f;  // How much to smooth out the movement
+	[SerializeField] private bool m_AirControl = false;                         // Whether or not a player can steer while jumping;
+	[SerializeField] private LayerMask m_WhatIsGround;                          // A mask determining what is ground to the character
+	[SerializeField] private Transform m_GroundCheck;                           // A position marking where to check if the player is grounded.
 	[SerializeField] private Transform m_WallCheck;                             //Posicion que controla si el personaje toca una pared
 	[SerializeField] private GameObject propulsion;
 
@@ -61,7 +61,7 @@ public class CharacterController2D : MonoBehaviour
 	public class BoolEvent : UnityEvent<bool> { }
 
 	public void End()
-	{ 
+	{
 		ending = true;
 		gauges.End();
 	}
@@ -80,13 +80,13 @@ public class CharacterController2D : MonoBehaviour
 			OnLandEvent = new UnityEvent();
 	}
 
-    public void Update()
-    {
+	public void Update()
+	{
 		animator.SetFloat("Speed", Mathf.Abs(m_Rigidbody2D.velocity.x));
 		propulsion.SetActive(animator.GetBool("IsJumping"));
 	}
 
-    private void FixedUpdate()
+	private void FixedUpdate()
 	{
 		bool wasGrounded = m_Grounded;
 		m_Grounded = false;
@@ -103,15 +103,15 @@ public class CharacterController2D : MonoBehaviour
 		{
 			if (colliders[i].gameObject != gameObject)
 				m_Grounded = true;
-				if (!wasGrounded )
-				{
-					OnLandEvent.Invoke();
-					if (!m_IsWall && !isDashing) 
-						particleJumpDown.Play();
-					canDoubleJump = true;
-					if (m_Rigidbody2D.velocity.y < 0f)
-						limitVelOnWallJump = false;
-				}
+			if (!wasGrounded)
+			{
+				OnLandEvent.Invoke();
+				if (!m_IsWall && !isDashing)
+					particleJumpDown.Play();
+				canDoubleJump = true;
+				if (m_Rigidbody2D.velocity.y < 0f)
+					limitVelOnWallJump = false;
+			}
 		}
 
 		m_IsWall = false;
@@ -136,27 +136,27 @@ public class CharacterController2D : MonoBehaviour
 			if (m_Rigidbody2D.velocity.y < -0.5f)
 				limitVelOnWallJump = false;
 			jumpWallDistX = (jumpWallStartX - transform.position.x) * transform.localScale.x;
-			if (jumpWallDistX < -0.5f && jumpWallDistX > -1f) 
+			if (jumpWallDistX < -0.5f && jumpWallDistX > -1f)
 			{
 				canMove = true;
 			}
-			else if (jumpWallDistX < -1f && jumpWallDistX >= -2f) 
+			else if (jumpWallDistX < -1f && jumpWallDistX >= -2f)
 			{
 				canMove = true;
 				m_Rigidbody2D.velocity = new Vector2(10f * transform.localScale.x, m_Rigidbody2D.velocity.y);
 			}
-			else if (jumpWallDistX < -2f) 
+			else if (jumpWallDistX < -2f)
 			{
 				limitVelOnWallJump = false;
 				m_Rigidbody2D.velocity = new Vector2(0, m_Rigidbody2D.velocity.y);
 			}
-			else if (jumpWallDistX > 0) 
+			else if (jumpWallDistX > 0)
 			{
 				limitVelOnWallJump = false;
 				m_Rigidbody2D.velocity = new Vector2(0, m_Rigidbody2D.velocity.y);
 			}
 		}
-	}
+	} 
 
 
 	public void Move(float move, bool jump,bool jumpHeld, bool dash)
@@ -165,10 +165,10 @@ public class CharacterController2D : MonoBehaviour
 		{
 			if (dash && canDash && !isWallSliding)
 			{
-				//m_Rigidbody2D.AddForce(new Vector2(transform.localScale.x * m_DashForce, 0f));
-				//StartCoroutine(DashCooldown());
+				m_Rigidbody2D.AddForce(new Vector2(transform.localScale.x * m_DashForce, 0f));
+				StartCoroutine(DashCooldown());
 			}
-			// If crouching, check to see if the character can stand up
+			//If crouching, check to see if the character can stand up
 			if (isDashing)
 			{
 				m_Rigidbody2D.velocity = new Vector2(transform.localScale.x * m_DashForce, 0);
@@ -324,6 +324,7 @@ public class CharacterController2D : MonoBehaviour
 
 	public void ApplyDamage(float damage, Vector3 position) 
 	{
+		Debug.Log("apply damage");
 		if (!invincible)
 		{
 			animator.SetBool("Hit", true);
