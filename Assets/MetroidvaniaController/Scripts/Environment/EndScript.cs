@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class EndScript : MonoBehaviour
 {
     public Image image;
-    public Text text;
+    public Image thanksForPlaying;
     public GameObject playerObject;
     public float blendTime = 3f;
     
@@ -39,7 +39,7 @@ public class EndScript : MonoBehaviour
 
         for (float i = 0; i <= blendTime; i += Time.deltaTime)
         {
-            text.color = new Color(1, 1, 1, i / blendTime);
+            thanksForPlaying.color = new Color(1, 1, 1, i / blendTime);
             yield return null;
         }
     }
